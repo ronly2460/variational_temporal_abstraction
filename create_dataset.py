@@ -66,3 +66,7 @@ def main():
     
     # 保存
     np.save(save_name, data)
+
+
+if __name__ == '__main__':
+    main()
