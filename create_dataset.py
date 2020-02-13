@@ -22,21 +22,21 @@ def preprocess(files):
     """
     paddingを行う (28x28 -> 32x32)
     """
-    imgs = np.empty((0, 32, 32))
+    imgs = []
 
     for img in files:
         img = np.pad(img, [2, 2])
-        imgs = np.vstack((imgs, img))
+        imgs.append(img)
                     
     return imgs
 
 
 def main():
     # parameters
-    data_length =  100000 # データの個数
+    data_length = 10000 # データの個数
     min_len = 3                # 連続する最小枚数
-    max_len = 10              # 連続する最大枚数
-    save_name = './data/imgs'
+    max_len = 8              # 連続する最大枚数
+    save_name = './dataset/imgs'
     
     files = extract_imgs()
     imgs = preprocess(files)
@@ -60,6 +60,10 @@ def main():
         res = np.array([imgs[idx] for _ in range(num)])
         data = np.vstack((data, res))
         cnt = cnt + num
+        
+        # Log
+        if cnt % 1000 == 0:
+            print(cnt)
     
     #reshape (-1, 32, 32) -> (-1, 1, 32, 32)
     data = data.reshape(-1, 1, 32, 32)
