@@ -1,0 +1,30 @@
+[data]
+batch_size = 64
+seq_size = 20
+init_size = 5
+
+[model]
+state_size = 8
+belief_size = 128
+num_layers = 3
+
+[observation]
+obs_std = 1.0
+obs_bit = 5
+
+[optimization]
+learn_rate = 0.0005
+grad_clip = 10.0
+max_iters = 500000
+
+[subprior]
+seg-num = 5
+seg-len = 8
+
+[gumbel]
+max_beta = 1.0
+min_beta = 0.1
+beta_anneal = 100
+
+[log]
+log_dir = './asset/log/'
