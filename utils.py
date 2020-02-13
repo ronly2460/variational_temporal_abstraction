@@ -5,18 +5,18 @@ from torch.utils.data import Dataset, DataLoader
 
 def highlite_boundary(input_data):
     input_data[0, :, 0] = 1.0
-    input_data[0, :, 1] = 0.0
-    input_data[0, :, 2] = 0.0
+#     input_data[0, :, 1] = 0.0
+#     input_data[0, :, 2] = 0.0
     input_data[-1, :, 0] = 1.0
-    input_data[-1, :, 1] = 0.0
-    input_data[-1, :, 2] = 0.0
+#     input_data[-1, :, 1] = 0.0
+#     input_data[-1, :, 2] = 0.0
 
     input_data[:, 0, 0] = 1.0
-    input_data[:, 0, 1] = 0.0
-    input_data[:, 0, 2] = 0.0
+#     input_data[:, 0, 1] = 0.0
+#     input_data[:, 0, 2] = 0.0
     input_data[:, -1, 0] = 1.0
-    input_data[:, -1, 1] = 0.0
-    input_data[:, -1, 2] = 0.0
+#     input_data[:, -1, 1] = 0.0
+#     input_data[:, -1, 2] = 0.0
     return input_data
 
 
@@ -244,15 +244,15 @@ def log_density_concrete(log_alpha, log_sample, temp):
 
 
 class MazeDataset(Dataset):
-    def __init__(self, length, partition, path='./vta_3dmaze_32x32_1000000.npz'):
+    def __init__(self, length, partition, path='./dataset/imgs.npy'):
         self.partition = partition
         dataset = np.load(path)
-        num_seqs = int(dataset['state'].shape[0] * 0.8)
+        num_seqs = int(dataset.shape[0] * 0.8)
         if self.partition == 'train':
-            self.state = dataset['state'][:num_seqs].transpose(0, 3, 2, 1) / 255.
+            self.state = dataset[:num_seqs]
         else:
-            self.state = dataset['state'][num_seqs:].transpose(0, 3, 2, 1) / 255.
-        self.state = self.state.reshape(-1, 100, 3, 32, 32)
+            self.state = dataset[num_seqs:]
+        self.state = self.state.reshape(-1, 100, 1, 32, 32)
 
         self.length = length
         self.full_length = self.state.shape[1]
@@ -268,7 +268,7 @@ class MazeDataset(Dataset):
         return state
 
 
-def full_dataloader(seq_size, init_size, batch_size, test_size=16, data_path='./vta_3dmaze_32x32_1000000.npz'):
+def full_dataloader(seq_size, init_size, batch_size, test_size=16, data_path='./dataset/imgs.npy'):
     train_loader = MazeDataset(length=seq_size + init_size * 2, partition='train', path=data_path)
     test_loader = MazeDataset(length=seq_size + init_size * 2, partition='test', path=data_path)
     train_loader = DataLoader(dataset=train_loader, batch_size=batch_size, shuffle=True)
