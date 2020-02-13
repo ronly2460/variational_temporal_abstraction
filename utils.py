@@ -5,18 +5,9 @@ from torch.utils.data import Dataset, DataLoader
 
 def highlite_boundary(input_data):
     input_data[0, :, 0] = 1.0
-#     input_data[0, :, 1] = 0.0
-#     input_data[0, :, 2] = 0.0
     input_data[-1, :, 0] = 1.0
-#     input_data[-1, :, 1] = 0.0
-#     input_data[-1, :, 2] = 0.0
-
     input_data[:, 0, 0] = 1.0
-#     input_data[:, 0, 1] = 0.0
-#     input_data[:, 0, 2] = 0.0
     input_data[:, -1, 0] = 1.0
-#     input_data[:, -1, 1] = 0.0
-#     input_data[:, -1, 2] = 0.0
     return input_data
 
 
@@ -30,13 +21,11 @@ def plot_rec(init_data_list, org_data_list, rec_data_list, mask_data_list, prior
     seq_size = org_data_list.size(1)
 
     # init pad
-    row_pad = np.zeros([1, (col_size + 2) * (seq_size + init_size), 3])
-    col_pad = np.zeros([row_size, 1, 3])
-    red_block = np.ones([row_size, col_size, 3])
-    red_block[:, :, 1:] = 0.0
-    blue_block = np.ones([row_size, col_size, 3])
-    blue_block[:, :, :2] = 0.0
-
+    row_pad = np.zeros([1, (col_size + 2) * (seq_size + init_size), 1])
+    col_pad = np.zeros([row_size, 1, 1])
+    red_block = np.ones([row_size, col_size, 1])
+    blue_block = np.ones([row_size, col_size, 1])
+    
     # init out image
     output_img = []
     output_mask = []
@@ -106,8 +95,8 @@ def plot_gen(init_data_list, gen_data_list, mask_data_list=None):
     seq_size = gen_data_list.size(1)
 
     # init pad
-    row_pad = np.zeros([1, (col_size + 2) * (seq_size + init_size), 3])
-    col_pad = np.zeros([row_size, 1, 3])
+    row_pad = np.zeros([1, (col_size + 2) * (seq_size + init_size), 1])
+    col_pad = np.zeros([row_size, 1, 1])
 
     # init out image
     output_img = []
