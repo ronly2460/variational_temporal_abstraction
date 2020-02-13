@@ -3,7 +3,7 @@ import toml
 from keras.datasets import mnist
 
 
-def extract_imgs():
+def get_imgs():
     """
     mnistをロードして、0, 1, 3, 7, 9の画像を取り出す
     """
@@ -41,14 +41,15 @@ def main():
     max_len = args['max_len']
     save_name = args['save_name']
     
-    files = extract_imgs()
+    # start
+    files = get_imgs()
     imgs = preprocess(files)
     
+    # データセット作成
     file_num = len(files)
     cnt = 0
     data = np.empty((0, 32, 32))
     
-    # データセット作成
     while cnt < data_length:
         #どの数字の画像を使うか
         idx = np.random.choice(file_num)
