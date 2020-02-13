@@ -46,6 +46,7 @@ def main():
     min_beta = args['min_beta']
     beta_anneal = args['beta_anneal']
     log_dir = args['log_dir']
+    test_times = args['test_times']
     
     # fix seed
     np.random.seed(seed)
@@ -127,7 +128,7 @@ def main():
             #############
             # test time #
             #############
-            if b_idx % 100 == 0:
+            if b_idx % test_times == 0:
                 # set data
                 pre_test_init_data_list = pre_test_full_data_list[:, :init_size]
                 post_test_init_data_list = postprocess(pre_test_init_data_list, obs_bit)

@@ -22,4 +22,5 @@ max_beta = 1.0
 min_beta = 0.1
 beta_anneal = 100
 
+test_times = 1
 log_dir = './asset/log/'
