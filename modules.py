@@ -160,7 +160,7 @@ class Encoder(nn.Module):
                  output_size=None,
                  feat_size=64):
         super(Encoder, self).__init__()
-        network_list = [ConvLayer2D(input_size=3,
+        network_list = [ConvLayer2D(input_size=1,
                                     output_size=feat_size,
                                     kernel_size=4,
                                     stride=2,
@@ -215,7 +215,7 @@ class Decoder(nn.Module):
                                      ConvTransLayer2D(input_size=feat_size,
                                                       output_size=feat_size),
                                      ConvTransLayer2D(input_size=feat_size,
-                                                      output_size=3,
+                                                      output_size=1,
                                                       normalize=False,
                                                       nonlinear=nn.Tanh()))
 
