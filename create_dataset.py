@@ -1,4 +1,5 @@
 import numpy as np
+import toml
 from keras.datasets import mnist
 
 
@@ -33,10 +34,12 @@ def preprocess(files):
 
 def main():
     # parameters
-    data_length = 10000 # データの個数
-    min_len = 3                # 連続する最小枚数
-    max_len = 8              # 連続する最大枚数
-    save_name = './dataset/imgs'
+    args = toml.load(open('config.toml'))['dataset']
+    
+    data_length = args['data_length']
+    min_len = args['min_len']
+    max_len = args['max_len']
+    save_name = args['save_name']
     
     files = extract_imgs()
     imgs = preprocess(files)

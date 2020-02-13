@@ -15,7 +15,7 @@ learn_rate = 0.0005
 grad_clip = 10.0
 max_iters = 500000
 
-seg_num = 5
+seg_num = 3
 seg_len = 8
 
 max_beta = 1.0
@@ -24,3 +24,9 @@ beta_anneal = 100
 
 test_times = 1
 log_dir = './asset/log/'
+
+[dataset]
+data_length = 100
+min_len = 3
+max_len = 8
+save_name = './dataset/imgs_test'
