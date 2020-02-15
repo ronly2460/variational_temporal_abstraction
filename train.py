@@ -48,6 +48,7 @@ def main():
     log_dir = args['log_dir']
     test_times = args['test_times']
     gpu_ids = args['gpu_ids']
+    data_path = args['data_path']
     
     # fix seed
     np.random.seed(seed)
@@ -69,7 +70,7 @@ def main():
     LOGGER.info('EXP NAME: ' + exp_name)
 
     # load dataset
-    train_loader, test_loader = full_dataloader(seq_size, init_size, batch_size)
+    train_loader, test_loader = full_dataloader(seq_size, init_size, batch_size, data_path)
     LOGGER.info('Dataset loaded')
 
     # init models

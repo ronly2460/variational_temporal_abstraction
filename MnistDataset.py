@@ -2,7 +2,7 @@ import numpy as np
 from torch.utils.data import Dataset
 
 class MnistDataset(Dataset):
-    def __init__(self, length, partition, path='./dataset/imgs.npy'):
+    def __init__(self, length, partition, path):
         self.partition = partition
         dataset = np.load(path)
         num_seqs = int(dataset.shape[0] * 0.8)

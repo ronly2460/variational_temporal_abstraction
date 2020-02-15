@@ -233,7 +233,7 @@ def log_density_concrete(log_alpha, log_sample, temp):
     return log_prob
 
 
-def full_dataloader(seq_size, init_size, batch_size, test_size=16, data_path='./dataset/imgs.npy'):
+def full_dataloader(seq_size, init_size, batch_size, test_size=16, data_path):
     train_loader = MnistDataset(length=seq_size + init_size * 2, partition='train', path=data_path)
     test_loader = MnistDataset(length=seq_size + init_size * 2, partition='test', path=data_path)
     train_loader = DataLoader(dataset=train_loader, batch_size=batch_size, shuffle=True)

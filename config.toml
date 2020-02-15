@@ -25,6 +25,7 @@ beta_anneal = 100
 test_times = 1000
 log_dir = './asset/log/'
 gpu_ids = [3, 4]
+data_path = './dataset/imgs.npy'
 
 [dataset]
 data_length = 1000000
