@@ -9,12 +9,14 @@ This is original repository
 * https://github.com/rahulbhalley/progressive-growing-of-gans.pytorch
 
 ### How to use
-1. Edit config.toml
+1. You must push star button at the upper right of this repository
 
-2. Prepare dataset
-*   you should run 'create_dataset.py'
+2. Edit config.toml
 
-3. Run 
+3. Prepare dataset
+*   you should run ```create_dataset.py```
+
+4. Run 
 ```python train.py```
     
 ### Version
