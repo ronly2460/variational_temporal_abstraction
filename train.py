@@ -63,7 +63,10 @@ def main():
     init_size = init_size
 
     # set device as gpu
-    device = torch.device('cpu')
+    if torch.cuda.is_available():
+        device = torch.device('cuda', 2)
+    else:
+        device = torch.device('cpu')
 
     # set writer
     exp_name = set_exp_name(args)
