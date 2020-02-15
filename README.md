@@ -6,7 +6,7 @@
 
 ### About this repository
 This is original repository
-* https://github.com/rahulbhalley/progressive-growing-of-gans.pytorch
+* https://github.com/taesupkim/vta
 
 ### How to use
 1. You must push the star button at the upper right of this repository
