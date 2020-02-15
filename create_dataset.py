@@ -4,19 +4,16 @@ import toml
 from keras.datasets import mnist
 
 
-def get_imgs():
+def get_imgs(target_label):
     """
     mnistをロードして、0, 1, 3, 7, 9の画像を取り出す
     """
-    (x_train, _), (_, _) = mnist.load_data()
+    (x_train, y_train), (_, _) = mnist.load_data()
     
-    zero = x_train[1]
-    one = x_train[3]
-    three = x_train[7]
-    seven = x_train[15]
-    nine = x_train[4]
+    files = []
+    for label in target_label:
+        files.append(x_train[np.where(y_train == label)][0])
 
-    files = [zero, one, three, seven, nine]
     return files
 
 
@@ -41,9 +38,10 @@ def main():
     min_len = args['min_len']
     max_len = args['max_len']
     save_name = args['save_name']
+    target_label = args['target_label']
     
     # start
-    files = get_imgs()
+    files = get_imgs(target_label)
     imgs = preprocess(files)
     
     # データセット作成
