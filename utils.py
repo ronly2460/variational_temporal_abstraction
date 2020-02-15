@@ -22,7 +22,7 @@ def plot_rec(init_data_list, org_data_list, rec_data_list, mask_data_list, prior
     seq_size = org_data_list.size(1)
 
     # init pad
-    row_pad = np.zeros([1, (col_size + 2) * (seq_size + init_size), 1])
+    row_pad = np.zeros([1, (col_size + 2) * (seq_size), 1])
     col_pad = np.zeros([row_size, 1, 1])
     red_block = np.ones([row_size, col_size, 1])
     blue_block = np.ones([row_size, col_size, 1])
@@ -35,22 +35,6 @@ def plot_rec(init_data_list, org_data_list, rec_data_list, mask_data_list, prior
         rec_img_list = []
         p_mask_list = []
         q_mask_list = []
-
-        # for init image
-        for i_idx in range(init_size):
-            org_img_list.append(col_pad)
-            rec_img_list.append(col_pad)
-            org_img_list.append(highlite_boundary(tensor2numpy_img(init_data_list[img_idx, i_idx])))
-            rec_img_list.append(highlite_boundary(tensor2numpy_img(init_data_list[img_idx, i_idx])))
-            org_img_list.append(col_pad)
-            rec_img_list.append(col_pad)
-
-            p_mask_list.append(col_pad)
-            q_mask_list.append(col_pad)
-            p_mask_list.append(blue_block)
-            q_mask_list.append(red_block)
-            p_mask_list.append(col_pad)
-            q_mask_list.append(col_pad)
 
         # for roll out sequence
         for i_idx in range(seq_size):
@@ -233,7 +217,7 @@ def log_density_concrete(log_alpha, log_sample, temp):
     return log_prob
 
 
-def full_dataloader(seq_size, init_size, batch_size, test_size=16, data_path):
+def full_dataloader(seq_size, init_size, batch_size, data_path, test_size=16):
     train_loader = MnistDataset(length=seq_size + init_size * 2, partition='train', path=data_path)
     test_loader = MnistDataset(length=seq_size + init_size * 2, partition='test', path=data_path)
     train_loader = DataLoader(dataset=train_loader, batch_size=batch_size, shuffle=True)
