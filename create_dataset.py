@@ -25,7 +25,7 @@ def preprocess(files):
 
     for img in files:
         img = np.pad(img, [2, 2])
-        imgs.append(img)
+        imgs.append(img.flatten())
                     
     return imgs
 
@@ -39,37 +39,33 @@ def main():
     max_len = args['max_len']
     save_name = args['save_name']
     target_label = args['target_label']
-    
+
     # start
     files = get_imgs(target_label)
     imgs = preprocess(files)
-    
+
     # データセット作成
     file_num = len(files)
     cnt = 0
-    data = np.empty((0, 32, 32))
-    
+    data = []
     while cnt < data_length:
+
         #どの数字の画像を使うか
         idx = np.random.choice(file_num)
-        
+
         # 同じ画像が連続する枚数
         num = np.random.choice(np.arange(min_len, max_len+1))
-        
+
         # data_lengthを超える場合
         if cnt + num > data_length:
             num = data_length - cnt
-        
-        res = np.array([imgs[idx] for _ in range(num)])
-        data = np.vstack((data, res))
+
+        res = np.tile(imgs[idx], num)
+        data.append(res)
         cnt = cnt + num
-        
-        # Log
-        if cnt % 1000 == 0:
-            print(cnt)
-    
+
     #reshape (-1, 32, 32) -> (-1, 1, 32, 32)
-    data = data.reshape(-1, 1, 32, 32)
+    data = np.concatenate(data).reshape(-1, 1, 32, 32)
     
     # 保存
     np.save(save_name, data)
