@@ -9,7 +9,7 @@ This is original repository
 * https://github.com/rahulbhalley/progressive-growing-of-gans.pytorch
 
 ### How to use
-1. You must push star button at the upper right of this repository
+1. You must push the star button at the upper right of this repository
 
 2. Edit config.toml
 
