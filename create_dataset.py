@@ -6,7 +6,7 @@ from keras.datasets import mnist
 
 def get_imgs(target_label):
     """
-    mnistをロードして、0, 1, 3, 7, 9の画像を取り出す
+    mnistをロードして、target_labelに対応する画像を取り出す
     """
     (x_train, y_train), (_, _) = mnist.load_data()
     
