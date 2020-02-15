@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 from torch.optim import Adam
 from torch.utils.tensorboard import SummaryWriter
-from hssm import EnvModel
+from envmodel import EnvModel
 from utils import preprocess, postprocess, full_dataloader, log_train, log_test, plot_rec, plot_gen
 LOGGER = logging.getLogger(__name__)
 
