@@ -47,6 +47,7 @@ def main():
     beta_anneal = args['beta_anneal']
     log_dir = args['log_dir']
     test_times = args['test_times']
+    gpu_ids = args['gpu_ids']
     
     # fix seed
     np.random.seed(seed)
@@ -62,12 +63,6 @@ def main():
     seq_size = seq_size
     init_size = init_size
 
-    # set device as gpu
-    if torch.cuda.is_available():
-        device = torch.device('cuda', 2)
-    else:
-        device = torch.device('cpu')
-
     # set writer
     exp_name = set_exp_name(args)
     writer = SummaryWriter(log_dir + exp_name)
@@ -82,7 +77,17 @@ def main():
                      state_size=state_size,
                      num_layers=num_layers,
                      max_seg_len=seg_len,
-                     max_seg_num=seg_num).to(device)
+                     max_seg_num=seg_num)
+
+    if torch.cuda.is_available():
+        device = torch.device(f'cuda:{gpu_ids[0]}')
+        model.to(device)
+        model = nn.DataParallel(model, device_ids=gpu_ids)
+        model = model.module
+    else:
+        device = torch.device('cpu')
+        model.to(device)
+        
     LOGGER.info('Model initialized')
 
     # init optimizer

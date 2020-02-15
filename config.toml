@@ -1,6 +1,6 @@
 [model]
 seed = 111
-batch_size = 64
+batch_size = 128
 seq_size = 20
 init_size = 5
 
@@ -13,7 +13,7 @@ obs_bit = 5
 
 learn_rate = 0.0005
 grad_clip = 10.0
-max_iters = 500000
+max_iters = 10000
 
 seg_num = 3
 seg_len = 8
@@ -22,11 +22,12 @@ max_beta = 1.0
 min_beta = 0.1
 beta_anneal = 100
 
-test_times = 1
+test_times = 1000
 log_dir = './asset/log/'
+gpu_ids = [3, 4]
 
 [dataset]
-data_length = 100
+data_length = 1000000
 min_len = 3
 max_len = 8
-save_name = './dataset/imgs_test'
+save_name = './dataset/imgs_100k'
