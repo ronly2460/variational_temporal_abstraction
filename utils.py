@@ -1,6 +1,7 @@
 import numpy as np
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
+from MnistDataset import MnistDataset
 
 
 def highlite_boundary(input_data):
@@ -232,34 +233,9 @@ def log_density_concrete(log_alpha, log_sample, temp):
     return log_prob
 
 
-class MazeDataset(Dataset):
-    def __init__(self, length, partition, path='./dataset/imgs.npy'):
-        self.partition = partition
-        dataset = np.load(path)
-        num_seqs = int(dataset.shape[0] * 0.8)
-        if self.partition == 'train':
-            self.state = dataset[:num_seqs]
-        else:
-            self.state = dataset[num_seqs:]
-        self.state = self.state.reshape(-1, 100, 1, 32, 32)
-
-        self.length = length
-        self.full_length = self.state.shape[1]
-
-    def __len__(self):
-        return self.state.shape[0]
-
-    def __getitem__(self, index):
-        idx0 = np.random.randint(0, self.full_length - self.length)
-        idx1 = idx0 + self.length
-
-        state = self.state[index, idx0:idx1].astype(np.float32)
-        return state
-
-
 def full_dataloader(seq_size, init_size, batch_size, test_size=16, data_path='./dataset/imgs.npy'):
-    train_loader = MazeDataset(length=seq_size + init_size * 2, partition='train', path=data_path)
-    test_loader = MazeDataset(length=seq_size + init_size * 2, partition='test', path=data_path)
+    train_loader = MnistDataset(length=seq_size + init_size * 2, partition='train', path=data_path)
+    test_loader = MnistDataset(length=seq_size + init_size * 2, partition='test', path=data_path)
     train_loader = DataLoader(dataset=train_loader, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_loader, batch_size=test_size, shuffle=False)
     return train_loader, test_loader
