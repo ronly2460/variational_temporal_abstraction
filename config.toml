@@ -14,7 +14,7 @@ obs_bit = 5
 
 learn_rate = 0.0005
 grad_clip = 10.0
-max_iters = 100
+max_iters = 100000
 
 seg_num = 3
 seg_len = 8
@@ -23,17 +23,17 @@ max_beta = 1.0
 min_beta = 0.1
 beta_anneal = 100
 
-test_times = 10 # 何回毎にテストするか
+test_times = 1000 # 何回毎にテストするか
 log_dir = './asset/log/' # ログ出力先
-gpu_ids = [3, 4] #使用するgpuのid
-data_path = '/export/space/n1610492/imgs_10k_variable.npy' # データセットpath
-data_length = 10000 # データの長さ
-fix = false
+gpu_ids = [1, 2] #使用するgpuのid
+data_path = '/export/space/n1610492/imgs_100k.npy' # データセットpath
+data_length = 100000 # データの長さ
+fix = true
 
 [dataset]
 target_label = [0, 1, 3, 5, 7] # 使用する数字
-data_length = 1000000 # で＝たセットの長さ
+data_length = 10000000 # データセットの長さ
 min_len = 3 # 最小の長さ
 max_len = 8 # 最大の長さ
-fix = false #　数字の画像を固定するか
-save_name = '/export/space/n1610492/imgs_10k_variable'　#データセットのファイル名
+fix = true #　数字の画像を固定するか
+save_name = '/export/space/n1610492/imgs_100k.npy'　#データセットのファイル名
