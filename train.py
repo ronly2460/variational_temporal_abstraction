@@ -21,6 +21,8 @@ def set_exp_name(args):
     exp_name += '_std{}_bits{}'.format(args['obs_std'], args['obs_bit'])
     exp_name += '_gum{}-{}-{}'.format(args['min_beta'], args['max_beta'], args['beta_anneal'])
     exp_name += '_seed{}'.format(args['seed'])
+    exp_name += '_max_iters{}'.format(args['max_iters'])
+    exp_name += '_data_length{}'.format(args['data_length'])
     return exp_name
 
 
