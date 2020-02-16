@@ -4,7 +4,7 @@ import toml
 from keras.datasets import mnist
 
 
-def get_imgs(target_label, fix=True, max_len=500):
+def get_imgs(target_label, fix=True, max_len=100):
     """
     mnistをロードして、target_labelに対応する画像を取り出す
     """
@@ -13,7 +13,6 @@ def get_imgs(target_label, fix=True, max_len=500):
     imgs_sets = []
     for label in target_label:
         if fix:
-            print('fix')
             imgs_sets.append(x_train[np.where(y_train == label)][0])
         else:
             x_train, y_train = x_train[:max_len], y_train[:max_len]
