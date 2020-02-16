@@ -85,7 +85,6 @@ def main():
     data = np.concatenate(data).reshape(-1, 1, 32, 32)
     
     # 保存
-    print('fin')
     np.save(save_name, data)
 
 
