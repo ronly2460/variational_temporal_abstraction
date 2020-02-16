@@ -23,6 +23,7 @@ def set_exp_name(args):
     exp_name += '_seed{}'.format(args['seed'])
     exp_name += '_max_iters{}'.format(args['max_iters'])
     exp_name += '_data_length{}'.format(args['data_length'])
+    exp_name += '_fix{}'.format(args['fix'])
     return exp_name
 
 
