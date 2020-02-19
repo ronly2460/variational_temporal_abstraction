@@ -59,10 +59,12 @@ def main():
     # データセット作成
     cnt = 0
     data = []
+    data_num = []
     while cnt < data_length:
         
         # 同じ画像が連続する枚数
         repeat_times = np.random.choice(np.arange(min_len, max_len+1))
+        
         # data_lengthを超える場合
         if cnt + repeat_times > data_length:
             repeat_times = data_length - cnt
@@ -77,14 +79,21 @@ def main():
             idx = np.random.choice(imgs_sets[num].shape[0])
             res = np.tile(imgs_sets[num][idx], repeat_times)
             
+        # label dataset作成
+        res_num = np.tile(target_label[num], repeat_times)
+        
         data.append(res)
+        data_num.append(res_num)
+        
         cnt = cnt + repeat_times
     
     #reshape (-1, 32, 32) -> (-1, 1, 32, 32)
     data = np.concatenate(data).reshape(-1, 1, 32, 32)
+    data_num = np.concatenate(data_num).reshape(-1, 1, 1)
     
     # 保存
     np.save(save_name, data)
+    np.save(save_name + '_label', data_num)
 
 
 if __name__ == '__main__':
