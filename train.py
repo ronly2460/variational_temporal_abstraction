@@ -99,14 +99,16 @@ def main():
                      lr=learn_rate, amsgrad=True)
 
     # test data
-    pre_test_full_data_list = iter(test_loader).next()
+    pre_test_full_list = iter(test_loader).next()
+    pre_test_full_data_list = pre_test_full_list['img']
+    pre_test_full_point_list = pre_test_full_list['point']
     pre_test_full_data_list = preprocess(pre_test_full_data_list.to(device), obs_bit)
 
     # for each iter
     b_idx = 0
     while b_idx <= max_iters:
         # for each batch
-        for train_obs_list in train_loader:
+        for train_list in train_loader:
             b_idx += 1
             # mask temp annealing
             if beta_anneal:
@@ -118,12 +120,14 @@ def main():
             # train time #
             ##############
             # get input data
+            train_obs_list = train_list['img']
+            train_points_list = train_list['point']
             train_obs_list = preprocess(train_obs_list.to(device), obs_bit)
 
             # run model with train mode
             model.train()
             optimizer.zero_grad()
-            results = model(train_obs_list, seq_size, init_size, obs_std)
+            results = model(train_obs_list, train_points_list, seq_size, init_size, obs_std)
 
             # get train loss and backward update
             train_total_loss = results['train_loss']
@@ -152,7 +156,7 @@ def main():
                     # test data elbo #
                     ##################
                     model.eval()
-                    results = model(pre_test_full_data_list, seq_size, init_size, obs_std)
+                    results = model(pre_test_full_data_list, pre_test_full_point_list, seq_size, init_size, obs_std)
                     post_test_rec_data_list = postprocess(results['rec_data'], obs_bit)
                     output_img, output_mask = plot_rec(post_test_init_data_list,
                                                        post_test_input_data_list,

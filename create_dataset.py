@@ -88,8 +88,8 @@ def main():
         cnt = cnt + repeat_times
     
     #reshape (-1, 32, 32) -> (-1, 1, 32, 32)
-    data = np.concatenate(data).reshape(-1, 1, 32, 32)
-    data_num = np.concatenate(data_num).reshape(-1, 1, 1)
+    data = np.concatenate(data).reshape(-1, 32, 32)
+    data_num = np.concatenate(data_num).reshape(-1)
     
     # 保存
     np.save(save_name, data)

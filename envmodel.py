@@ -30,7 +30,7 @@ class EnvModel(nn.Module):
                                                        max_seg_len=self.max_seg_len,
                                                        max_seg_num=self.max_seg_num)
 
-    def forward(self, obs_data_list, seq_size, init_size, obs_std=1.0):
+    def forward(self, obs_data_list, obs_points_list, seq_size, init_size, obs_std=1.0):
         ############################
         # (1) run over state model #
         ############################
@@ -67,6 +67,7 @@ class EnvModel(nn.Module):
             kl_obs_state = kl_divergence(post_obs_state_list[t], prior_obs_state_list[t])
             kl_abs_state_list.append(kl_abs_state.sum(-1))
             kl_obs_state_list.append(kl_obs_state.sum(-1))
+            
         kl_abs_state_list = torch.stack(kl_abs_state_list, dim=1)
         kl_obs_state_list = torch.stack(kl_obs_state_list, dim=1)
 
@@ -76,6 +77,7 @@ class EnvModel(nn.Module):
         # return
         return {'rec_data': obs_rec_list,
                 'mask_data': boundary_data_list,
+                'mask_data_true': obs_points_list,
                 'obs_cost': obs_cost,
                 'kl_abs_state': kl_abs_state_list,
                 'kl_obs_state': kl_obs_state_list,

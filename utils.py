@@ -2,6 +2,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from MnistDataset import MnistDataset
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 
 def highlite_boundary(input_data):
@@ -121,7 +122,8 @@ def log_train(results, writer, b_idx):
     train_kl_abs_cost = results['kl_abs_state'].mean()
     train_kl_obs_cost = results['kl_obs_state'].mean()
     train_kl_mask_cost = results['kl_mask'].mean()
-
+    train_metrixs = calc_metrixs(results['mask_data_true'], results['mask_data'])
+    
     # log
     writer.add_scalar('train/full_cost', train_obs_cost + train_kl_abs_cost + train_kl_obs_cost + train_kl_mask_cost, global_step=b_idx)
     writer.add_scalar('train/obs_cost', train_obs_cost, global_step=b_idx)
@@ -133,11 +135,17 @@ def log_train(results, writer, b_idx):
     writer.add_scalar('train/p_ent', results['q_ent'].mean(), global_step=b_idx)
     writer.add_scalar('train/read_ratio', results['mask_data'].sum(1).mean(), global_step=b_idx)
     writer.add_scalar('train/beta', results['beta'], global_step=b_idx)
-
+    
+    writer.add_scalar('train/accuracy', train_metrixs['accuracy'].mean(), global_step=b_idx)
+    writer.add_scalar('train/precision', train_metrixs['precision'].mean(), global_step=b_idx)
+    writer.add_scalar('train/recall', train_metrixs['recall'].mean(), global_step=b_idx)
+    writer.add_scalar('train/f_value', train_metrixs['f_value'].mean(), global_step=b_idx)
+    
     log_str = '[%08d] train=elbo:%7.3f, obs_nll:%7.3f, ' \
               'kl_full:%5.3f, kl_abs:%5.3f, kl_obs:%5.3f, kl_mask:%5.3f, ' \
               'num_reads:%3.1f, beta: %3.3f, ' \
               'p_ent: %3.2f, q_ent: %3.2f'
+    
     log_data = [b_idx,
                 - (train_obs_cost + train_kl_abs_cost + train_kl_obs_cost + train_kl_mask_cost),
                 train_obs_cost,
@@ -149,6 +157,7 @@ def log_train(results, writer, b_idx):
                 results['beta'],
                 results['p_ent'].mean(),
                 results['q_ent'].mean()]
+    
     return log_str, log_data
 
 
@@ -158,7 +167,8 @@ def log_test(results, writer, b_idx):
     test_kl_abs_cost = results['kl_abs_state'].mean()
     test_kl_obs_cost = results['kl_obs_state'].mean()
     test_kl_mask_cost = results['kl_mask'].mean()
-
+    test_metrixs = calc_metrixs(results['mask_data_true'], results['mask_data'])
+    
     writer.add_scalar('valid/full_cost', test_obs_cost + test_kl_abs_cost + test_kl_obs_cost + test_kl_mask_cost, global_step=b_idx)
     writer.add_scalar('valid/obs_cost', test_obs_cost, global_step=b_idx)
     writer.add_scalar('valid/kl_full_cost', test_kl_abs_cost + test_kl_obs_cost + test_kl_mask_cost, global_step=b_idx)
@@ -166,7 +176,12 @@ def log_test(results, writer, b_idx):
     writer.add_scalar('valid/kl_obs_cost', test_kl_obs_cost, b_idx)
     writer.add_scalar('valid/kl_mask_cost', test_kl_mask_cost, global_step=b_idx)
     writer.add_scalar('valid/read_ratio', results['mask_data'].sum(1).mean(), global_step=b_idx)
-
+    
+    writer.add_scalar('valid/accuracy', test_metrixs['accuracy'].mean(), global_step=b_idx)
+    writer.add_scalar('valid/precision', test_metrixs['precision'].mean(), global_step=b_idx)
+    writer.add_scalar('valid/recall', test_metrixs['recall'].mean(), global_step=b_idx)
+    writer.add_scalar('valid/f_value', test_metrixs['f_value'].mean(), global_step=b_idx)
+    
     log_str = '[%08d] valid=elbo:%7.3f, obs_nll:%7.3f, ' \
               'kl_full:%5.3f, kl_abs:%5.3f, kl_obs:%5.3f, kl_mask:%5.3f, ' \
               'num_reads:%3.1f'
@@ -215,6 +230,28 @@ def log_density_concrete(log_alpha, log_sample, temp):
     exp_term = log_alpha - temp * log_sample
     log_prob = torch.sum(exp_term, -1) - 2.0 * torch.logsumexp(exp_term, -1)
     return log_prob
+
+
+def calc_metrixs(y_true, y_pred):
+    accuracy = []
+    precision = []
+    recall = []
+    f_value = []
+    
+    for true, pred in zip(y_true, y_pred):
+        true[0] = 1
+        pred[0] = 1
+        accuracy.append(accuracy_score(true, pred))
+        precision.append(precision_score(true, pred))
+        recall.append(recall_score(true, pred))
+        f_value.append(f1_score(true, pred))
+        
+    res = {
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall': recall,
+        'f_value': f_value}
+    return res
 
 
 def full_dataloader(seq_size, init_size, batch_size, data_path, test_size=16):
