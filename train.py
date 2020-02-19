@@ -7,7 +7,7 @@ import torch.nn as nn
 from torch.optim import Adam
 from torch.utils.tensorboard import SummaryWriter
 from envmodel import EnvModel
-from utils import preprocess, postprocess, full_dataloader, log_train, log_test, plot_rec, plot_gen
+from utils import preprocess, postprocess, full_dataloader, log_train, log_test, plot_rec, plot_gen, calc_metrixs
 LOGGER = logging.getLogger(__name__)
 
 
@@ -180,7 +180,36 @@ def main():
                     # log
                     output_img = plot_gen(post_test_init_data_list, post_test_gen_data_list, test_mask_data_list)
                     writer.add_image('valid/full_gen_image', output_img.transpose([2, 0, 1]), b_idx)
-
-
+              
+    
+    with torch.no_grad():
+            
+        model.eval()
+        acc = []
+        precision = []
+        recall = []
+        f_value = []
+        for test in test_loader:
+            test_obs = test['img']
+            test_point = test['point']
+            test_obs = preprocess(test_obs.to(device), obs_bit)
+            results = model(test_obs, test_point, seq_size, init_size, obs_std)
+            metrixs = calc_metrixs(results['mask_data_true'], results['mask_data'])
+            acc.append(metrixs['accuracy'])
+            precision.append(metrixs['precision'])
+            recall.append(metrixs['recall'])
+            f_value.append(metrixs['f_value'])
+            
+        acc = np.concatenate(acc)
+        precision = np.concatenate(precision)
+        recall = np.concatenate(recall)
+        f_value = np.concatenate(f_value)
+        
+        print('shape: ', acc.shape)
+        print('accuracy: ', acc.mean())
+        print('precision: ', precision.mean())
+        print('recall: ', recall.mean())
+        print('f_value: ', f_value.mean())
+        
 if __name__ == '__main__':
     main()
