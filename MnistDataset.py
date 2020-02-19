@@ -21,7 +21,7 @@ class MnistDataset(Dataset):
         
         self.imgs = self.imgs.reshape(-1, 100, 1, 32, 32)
         self.labels = self.labels.reshape(-1, 100, 1, 1)
-        self.points = self.points.reshape(-1, 1, 1)
+        self.points = self.points.reshape(-1, 100, 1, 1)
         
         self.length = length
         self.full_length = self.imgs.shape[1]

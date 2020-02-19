@@ -238,7 +238,11 @@ def calc_metrixs(y_true, y_pred):
     recall = []
     f_value = []
     
+    y_true = y_true.cpu().detach().numpy()
+    y_pred = y_pred.cpu().detach().numpy()
     for true, pred in zip(y_true, y_pred):
+        true = true.flatten()
+        pred = pred.flatten()
         true[0] = 1
         pred[0] = 1
         accuracy.append(accuracy_score(true, pred))
@@ -247,10 +251,10 @@ def calc_metrixs(y_true, y_pred):
         f_value.append(f1_score(true, pred))
         
     res = {
-        'accuracy': accuracy,
-        'precision': precision,
-        'recall': recall,
-        'f_value': f_value}
+        'accuracy': np.array(accuracy),
+        'precision': np.array(precision),
+        'recall': np.array(recall),
+        'f_value': np.array(f_value)}
     return res
 
 

@@ -74,6 +74,7 @@ class EnvModel(nn.Module):
         # compute kl related to boundary
         kl_mask_list = (post_boundary_log_density_list - prior_boundary_log_density_list)
 
+        obs_points_list = obs_points_list[:, init_size:-init_size]
         # return
         return {'rec_data': obs_rec_list,
                 'mask_data': boundary_data_list,

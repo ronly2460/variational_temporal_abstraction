@@ -103,7 +103,7 @@ def main():
     pre_test_full_data_list = pre_test_full_list['img']
     pre_test_full_point_list = pre_test_full_list['point']
     pre_test_full_data_list = preprocess(pre_test_full_data_list.to(device), obs_bit)
-
+    
     # for each iter
     b_idx = 0
     while b_idx <= max_iters:
