@@ -258,9 +258,12 @@ def calc_metrixs(y_true, y_pred):
     return res
 
 
-def full_dataloader(seq_size, init_size, batch_size, data_path, test_size=16):
+def full_dataloader(seq_size, init_size, batch_size, data_path, check_path, test_size=16):
     train_dataset = MnistDataset(length=seq_size + init_size * 2, partition='train', path=data_path)
     test_dataset = MnistDataset(length=seq_size + init_size * 2, partition='test', path=data_path)
+    check_dataset = MnistDataset(length=seq_size + init_size * 2, partition='check', path=check_path)
+    
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=test_size, shuffle=False)
-    return train_loader, test_loader
+    check_loader = DataLoader(dataset=check_dataset, batch_size=batch_size, shuffle=False)
+    return train_loader, test_loader, check_loader

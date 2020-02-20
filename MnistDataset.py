@@ -7,20 +7,22 @@ class MnistDataset(Dataset):
         self.partition = partition
         imgs = np.load(path + '.npy')
         labels = np.load(path + '_label.npy')
-        
-        train_size = int(imgs.shape[0] * 0.8)
-        
-        if self.partition == 'train':
-            self.imgs = imgs[:train_size]
-            self.labels = labels[:train_size]
+
+        if self.partition == 'check':
+            self.imgs = imgs
+            self.labels = labels
         else:
-            self.imgs = imgs[train_size:]
-            self.labels = labels[train_size:]
+            train_size = int(imgs.shape[0] * 0.8)
+            if self.partition == 'train':
+                self.imgs = imgs[:train_size]
+                self.labels = labels[:train_size]
+            elif self.partition == 'test':
+                self.imgs = imgs[train_size:]
+                self.labels = labels[train_size:]
             
         self.points = self._calc_point(self.labels)
         
         self.length = length
-        self.full_length = self.imgs.shape[1]
         
         self.imgs = self.imgs.reshape(-1, self.length, 1, 32, 32)
         self.labels = self.labels.reshape(-1, self.length, 1, 1)

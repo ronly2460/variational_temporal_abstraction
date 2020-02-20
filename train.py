@@ -52,6 +52,7 @@ def main():
     test_times = args['test_times']
     gpu_ids = args['gpu_ids']
     data_path = args['data_path']
+    check_path = args['check_path']
     
     # fix seed
     np.random.seed(seed)
@@ -73,7 +74,7 @@ def main():
     LOGGER.info('EXP NAME: ' + exp_name)
 
     # load dataset
-    train_loader, test_loader = full_dataloader(seq_size, init_size, batch_size, data_path)
+    train_loader, test_loader, check_loader = full_dataloader(seq_size, init_size, batch_size, data_path, check_path)
     LOGGER.info('Dataset loaded')
 
     # init models
@@ -183,17 +184,16 @@ def main():
               
     
     with torch.no_grad():
-            
         model.eval()
         acc = []
         precision = []
         recall = []
         f_value = []
-        for test in test_loader:
-            test_obs = test['img']
-            test_point = test['point']
-            test_obs = preprocess(test_obs.to(device), obs_bit)
-            results = model(test_obs, test_point, seq_size, init_size, obs_std)
+        for check in check_loader:
+            check_obs = check['img']
+            check_point = check['point']
+            check_obs = preprocess(check_obs.to(device), obs_bit)
+            results = model(check_obs, check_point, seq_size, init_size, obs_std)
             metrixs = calc_metrixs(results['mask_data_true'], results['mask_data'])
             acc.append(metrixs['accuracy'])
             precision.append(metrixs['precision'])
