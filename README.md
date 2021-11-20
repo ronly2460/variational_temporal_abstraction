@@ -1,6 +1,6 @@
 ## Variational Temporal Abstraction (VTA)
 ### Paper
-* URL: https://arxiv.org/abs/1710.10196
+* URL: https://arxiv.org/pdf/1910.00775.pdf
 * Authors
     Taesup Kim, Sungjin Ahn, Yoshua Bengio @NeurIPS 2019
 
