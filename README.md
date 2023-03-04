@@ -4,13 +4,6 @@
 * Authors
     Taesup Kim, Sungjin Ahn, Yoshua Bengio @NeurIPS 2019
 
-### About this repository
-This is original repository
-* https://github.com/taesupkim/vta
-
-I fixed the original version of repository to do experiment using MNIST dataset.
-In addition, this code is for python3
-
 ### How to use
 1. You must push the star button at the upper right of this repository
 
